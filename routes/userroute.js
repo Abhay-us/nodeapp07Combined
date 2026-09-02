@@ -22,5 +22,12 @@ router.get('/activeuser/get', activecontroller.getUser);
 
 router.get('/activeuser/get/:id', activecontroller.getUserById);
 
+router.put('/activeuser/update/:id', activecontroller.update);
+
+router.put('/activeuser/updatepassword/:id', activecontroller.updatePassword);
+
+router.delete('/activeuser/delete/:id', activecontroller.softDelete);
+
+router.delete('/activeuser/harddelete/:id', activecontroller.hardDelete);
 
 module.exports = router;

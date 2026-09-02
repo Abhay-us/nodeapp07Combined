@@ -60,8 +60,6 @@ exports.deleteUser = async (req, res) => {
     try {
         const user = await user1Table.findById(req.params.id);
 
-
-
         await user.deleteOne();
 
         res.status(200).json({
