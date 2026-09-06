@@ -32,6 +32,16 @@ exports.getUserById = async (req, res) => {
     }
 }
 
+exports.getUserByEmail = async (req, res) => {
+    console.log(req.body);
+    const { email } = req.body;
+    try {
+        const user = await activeTable.findOne({ email: email });
+        res.json(user);
+    } catch (error) {
+        res.status(400).send("Unable To Fetch User");
+    }
+}
 
 exports.update = async (req, res) => {
     const { name, email, isTermsFlag } = req.body;

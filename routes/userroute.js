@@ -2,7 +2,7 @@ const express = require('express');
 const user1Table = require('../models/usermodel');
 const usercontroller = require('../controllers/usercontroller');
 const activeTable = require('../models/activemodel');
-const activecontroller = require('../controllers/activecontroller');
+const activecontroller = require('../controllers/activeusercontroller');
 const router = express.Router();
 
 router.get('/user', usercontroller.getUser);
@@ -21,6 +21,8 @@ router.post('/activeuser/post', activecontroller.postUser);
 router.get('/activeuser/get', activecontroller.getUser);
 
 router.get('/activeuser/get/:id', activecontroller.getUserById);
+
+router.post('/activeuser/getuserbyemail', activecontroller.getUserByEmail);
 
 router.put('/activeuser/update/:id', activecontroller.update);
 

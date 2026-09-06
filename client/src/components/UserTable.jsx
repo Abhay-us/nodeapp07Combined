@@ -15,6 +15,8 @@ const UserTable = () => {
     // add/post user
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
+    const handleShow = () => { setShow(true) };
+
 
     // edit
     const [editUser, setEditUser] = useState(null);
@@ -25,6 +27,26 @@ const UserTable = () => {
     const [deleteUserData, setDeleteUserData] = useState(null);
     const [deleteShow, setDeleteShow] = useState(false);
     const handleDeleteClose = () => setDeleteShow(false);
+
+
+    const { register, handleSubmit, reset, formState: { errors } } = useForm({
+        defaultValues: {
+            name: "",
+            email: "",
+            phoneNumber: "",
+            gender: "",
+            status: "",
+        }
+    });
+
+    const submitForm = async (data) => {
+        data.status = data.status === "active" ? true : false;
+        await postUser(data);
+        fetchUsers();
+        reset();
+        handleClose();
+    }
+
 
     //get
     const fetchUsers = async () => {
@@ -64,34 +86,6 @@ const UserTable = () => {
         }
     }
 
-    const { register, handleSubmit, reset, formState: { errors } } = useForm({
-        defaultValues: {
-            name: "",
-            email: "",
-            phoneNumber: "",
-            gender: "",
-            status: "",
-        }
-    });
-
-    const submitForm = async (data) => {
-        data.status = data.status === "active" ? true : false;
-        await postUser(data);
-        fetchUsers();
-        reset();
-        handleClose();
-    }
-
-    const handleShow = () => {
-        reset({
-            name: "",
-            email: "",
-            phoneNumber: "",
-            gender: "",
-            status: ""
-        });
-        setShow(true);
-    };
 
 
     //edit user
@@ -117,15 +111,13 @@ const UserTable = () => {
         }
     };
     const submitEditForm = async (data) => {
-        const requestData = {
-            ...data,
-            status: data.status === "active"
-        };
-        toast.dark("User Updated successfully", { position: "top-center" });
-        await putUser(editUser._id, requestData);
+        data.status = data.status === "active" ? true : false;
+
+        await putUser(editUser._id, data);
         fetchUsers();
         reset();
         handleEditClose();
+        toast.dark("User Updated successfully", { position: "top-center" });
     };
 
 
