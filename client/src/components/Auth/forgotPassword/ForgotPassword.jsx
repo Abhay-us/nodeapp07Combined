@@ -4,38 +4,50 @@ import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { userValidation } from "../../../validation/userValidation";
 import './forgotPassword.css'
-
 import axios from "axios";
-
 
 const ForgotPassword = () => {
     const navigate = useNavigate();
 
     const [showPasswordPage, setShowPasswordPage] = useState(false);
-    const { register, handleSubmit, reset, formState: { errors } } = useForm();
+    const { register, handleSubmit, reset, formState: { errors } } = useForm({
+        defaultValues: {
+            email: "",
+            password: "",
+            confirmPassword: ""
+        }
+    });
 
     const [activeUser, setActiveUser] = useState();
 
     const submitForm = async (data) => {
+        try {
+            const response = await axios.post(
+                "http://localhost:5454/activeuser/getuserbyemail",
+                {
+                    email: data.email
+                }
+            );
 
-        console.log(data);
+            console.log(response.data);
+            setActiveUser(response.data);
+            setShowPasswordPage(true);
 
-        const response = await axios.post(`http://localhost:5454/activeuser/getuserbyemail`, { email: data.email });
-
-        setActiveUser(response.data);
-        console.log(response.data);
-
-        setShowPasswordPage(true);
-    }
+        } catch (error) {
+            console.log(error);
+            toast.error(
+                error.response?.data?.message || "User not found"
+            );
+        }
+    };
 
     const resetPassword = async (data) => {
         if (data.password !== data.confirmPassword) {
             toast.error("Password Doesn't match.")
             return;
         }
-
-        toast.info("Password Updated Succesfully")
-
+    
+        toast.info("Password Updated Succesfully");
         console.log(data);
         reset();
         navigate('/login')
