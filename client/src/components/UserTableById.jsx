@@ -1,10 +1,11 @@
-import axios from "axios";
+// import axiosinterceptor from "axios";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useForm } from "react-hook-form";
 import { userValidation } from "../validation/userValidation";
+import axiosinterceptor from "../services/axiosinterceptor";
 
 const UserTableById = () => {
     const { id } = useParams();
@@ -17,7 +18,7 @@ const UserTableById = () => {
 
     const fetchUserById = async () => {
         try {
-            
+            const response = await axiosinterceptor.get(`/user/${id}`);
             setUser(response.data);
         } catch (error) {
             console.error('Error fetching users:', error);
@@ -52,7 +53,7 @@ const UserTableById = () => {
 
     const putUser = async (id, data) => {
         try {
-            await axios.put(
+            await axiosinterceptor.put(
                 `http://localhost:5454/user/put/${id}`, data
             );
         } catch (error) {

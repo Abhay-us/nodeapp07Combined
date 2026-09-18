@@ -2,8 +2,9 @@ import './register.css'
 import reg1 from '../../../assets/signup1-image.jpg'
 import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
 import { useForm } from 'react-hook-form';
-import axios from 'axios';
+// import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
+import axiosinterceptor from '../../../services/axiosinterceptor';
 const Register = () => {
     const { register, handleSubmit, reset } = useForm({
         defaultValues: {
@@ -21,9 +22,9 @@ const Register = () => {
             alert("Password Does'nt Match");
             return;
         }
-        
+
         try {
-            await axios.post(`http://localhost:5454/activeuser/post`, data);
+            await axiosinterceptor.post(`http://localhost:5454/activeuser/post`, data);
             toast.success("User Register Successfully.", { position: "bottom-right" })
             reset();
         } catch (error) {

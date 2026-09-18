@@ -4,7 +4,8 @@ import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { userValidation } from "../../../validation/userValidation";
 import './forgotPassword.css'
-import axios from "axios";
+// import axios from "axios";
+import axiosinterceptor from "../../../services/axiosinterceptor";
 
 const ForgotPassword = () => {
     const navigate = useNavigate();
@@ -22,7 +23,7 @@ const ForgotPassword = () => {
 
     const submitForm = async (data) => {
         try {
-            const response = await axios.post(
+            const response = await axiosinterceptor.post(
                 "http://localhost:5454/activeuser/getuserbyemail",
                 {
                     email: data.email
@@ -46,7 +47,7 @@ const ForgotPassword = () => {
             toast.error("Password Doesn't match.")
             return;
         }
-    
+
         toast.info("Password Updated Succesfully");
         console.log(data);
         reset();

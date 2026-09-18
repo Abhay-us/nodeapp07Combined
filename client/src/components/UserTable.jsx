@@ -1,12 +1,13 @@
-import axios from "axios"
+// import axios from "axios"
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { useForm } from "react-hook-form";
+import { useForm } from "react-hook-form"; 
 import { ToastContainer, toast } from 'react-toastify'
 import Table from 'react-bootstrap/Table';
 import { userValidation } from "../validation/userValidation";
+import axiosinterceptor from "../services/axiosinterceptor";
 
 const UserTable = () => {
 
@@ -51,7 +52,7 @@ const UserTable = () => {
     //get
     const fetchUsers = async () => {
         try {
-            const response = await axios.get('http://localhost:5454/user');
+            const response = await axiosinterceptor.get('/user');
             setUsers(response.data);
         } catch (error) {
             console.error('Error fetching users:', error);
@@ -61,7 +62,7 @@ const UserTable = () => {
     //delete
     const deleteUser = async (id) => {
         try {
-            await axios.delete(`http://localhost:5454/user/delete/${id}`);
+            await axiosinterceptor.delete(`/user/delete/${id}`);
             fetchUsers();
             handleDeleteClose();
             toast.warn("Deleted Successfully", { position: "top-right" })
@@ -79,7 +80,7 @@ const UserTable = () => {
     const postUser = async (data) => {
         console.log("Post user = " + JSON.stringify(data));  //is mainly used for debugging. It prints your data object in a readable format in the browser console.
         try {
-            await axios.post(`http://localhost:5454/user/post`, data);
+            await axiosinterceptor.post(`/user/post`, data);
             toast.success("User Added Successfully.", { position: "bottom-right" })
         } catch (error) {
             console.error('Error fetching users:', error);
@@ -102,8 +103,8 @@ const UserTable = () => {
     };
     const putUser = async (id, data) => {
         try {
-            await axios.put(
-                `http://localhost:5454/user/put/${id}`,
+            await axiosinterceptor.put(
+                `/user/put/${id}`,
                 data
             );
         } catch (error) {
