@@ -60,25 +60,34 @@ exports.update = async (req, res) => {
 }
 
 exports.updatePassword = async (req, res) => {
-    const { password, repeatedPassword } = req.body;
+    const { password, confirmPassword } = req.body;
+    console.log(password, confirmPassword);
     try {
-        if (password !== repeatedPassword) {
-            return res.status(400).send("Password Not Match")
+        if (!password || !confirmPassword) {
+            return res.status(404).send("Password & confirmPassword is required");
         }
-        const user = await activeTable.findById(req.params.id);
+
+        if (password !== confirmPassword) {
+            return res.status(404).send("Password Not Match")
+        }
+
+        // const user = await activeTable.findById(req.params.id);
+        const user = await activeTable.findOne({ _id: req.params.id, isDeleted: false });
 
         if (!user) {
-            return res.status(400).send("User Not found");
+            return res.status(404).send("User Not found");
         }
 
+        user.oldPassword = user.password;
         user.password = password;
+        user.updatedAt = new Date();
 
         await user.save();
 
-        res.json(user);
+        res.status(200).json(user);
 
     } catch (error) {
-        res.status(400).send("Error");
+        res.status(500).send("Error: Password did not Update!");
     }
 }
 

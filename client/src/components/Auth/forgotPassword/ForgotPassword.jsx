@@ -24,7 +24,7 @@ const ForgotPassword = () => {
     const submitForm = async (data) => {
         try {
             const response = await axiosinterceptor.post(
-                "http://localhost:5454/activeuser/getuserbyemail",
+                "/activeuser/getuserbyemail",
                 {
                     email: data.email
                 }
@@ -43,15 +43,42 @@ const ForgotPassword = () => {
     };
 
     const resetPassword = async (data) => {
+        // if(!(activeUser && activeUser._id)){  // old format
+        if(!activeUser?._id){
+            toast.error("User not Found!");
+            setShowPasswordPage(false);
+            return;
+        }
+
+        if (!data.password || !data.confirmPassword) {
+            toast.error("Please enter password & confirm password.")
+            return;
+        }
+
         if (data.password !== data.confirmPassword) {
             toast.error("Password Doesn't match.")
             return;
         }
 
-        toast.info("Password Updated Succesfully");
-        console.log(data);
-        reset();
-        navigate('/login')
+        try{
+            const response = await axiosinterceptor.put(`/activeuser/updatepassword/${activeUser._id}`, {password: data.password, confirmPassword: data.confirmPassword});
+
+            console.log("Update successful", response);
+            toast.success("Password Updated successful!");
+            // toast.success(response?.data?.message || "Password Updated successful!");
+
+            reset();
+            setActiveUser(null);
+            setShowPasswordPage(false);
+
+            navigate("/login");
+
+        } catch (error) {
+            console.log("Reset Password Error!", error);
+            toast.error(
+                error.response?.data?.message || "Unable to Update Password."
+            );
+        }
     };
     return (
         <>
