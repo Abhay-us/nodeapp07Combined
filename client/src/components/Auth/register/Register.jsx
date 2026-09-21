@@ -11,14 +11,14 @@ const Register = () => {
             name: "",
             email: "",
             password: "",
-            repeatedPassword: "",
+            confirmPassword: "",
             isTermsFlag: false
         }
     });
 
     const postUser = async (data) => {
         console.log("Form Data = ", data);
-        if (data.password !== data.repeatedPassword) {
+        if (data.password !== data.confirmPassword) {
             alert("Password Does'nt Match");
             return;
         }
@@ -84,7 +84,7 @@ const Register = () => {
                                             <FaLock className="icon" />
                                             <input
                                                 type="password"
-                                                {...register("repeatedPassword")}
+                                                {...register("confirmPassword")}
                                                 className="form-control ps-5"
                                                 placeholder="Repeat your password"
                                             />

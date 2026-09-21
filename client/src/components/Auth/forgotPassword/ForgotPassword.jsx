@@ -44,7 +44,7 @@ const ForgotPassword = () => {
 
     const resetPassword = async (data) => {
         // if(!(activeUser && activeUser._id)){  // old format
-        if(!activeUser?._id){
+        if (!activeUser?._id) {
             toast.error("User not Found!");
             setShowPasswordPage(false);
             return;
@@ -60,8 +60,11 @@ const ForgotPassword = () => {
             return;
         }
 
-        try{
-            const response = await axiosinterceptor.put(`/activeuser/updatepassword/${activeUser._id}`, {password: data.password, confirmPassword: data.confirmPassword});
+        try {
+            const response = await axiosinterceptor.put(`/activeuser/updatepassword/${activeUser._id}`, {
+                password: data.password
+                , confirmPassword: data.confirmPassword
+            });
 
             console.log("Update successful", response);
             toast.success("Password Updated successful!");
