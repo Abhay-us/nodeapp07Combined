@@ -5,6 +5,12 @@ const activeTable = require('../models/activemodel');
 const activecontroller = require('../controllers/activeusercontroller');
 const router = express.Router();
 
+// register
+router.post('/activeuser/post', activecontroller.postUser);
+//login
+router.post('/activeuser/login', activecontroller.loginActiveuser);
+
+
 router.get('/user', usercontroller.getUser);
 
 router.get('/user/:id', usercontroller.getUserById);
@@ -16,7 +22,7 @@ router.put('/user/put/:id', usercontroller.putUser);
 router.delete('/user/delete/:id', usercontroller.deleteUser)
 
 //active user
-router.post('/activeuser/post', activecontroller.postUser);
+// router.post('/activeuser/post', activecontroller.postUser);
 
 router.get('/activeuser/get', activecontroller.getUser);
 

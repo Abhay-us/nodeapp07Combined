@@ -116,3 +116,50 @@ exports.hardDelete = async (req, res) => {
         res.status(400).send("Unable to delete user");
     }
 }
+
+// Login Module
+exports.loginActiveuser = async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        if (!email || !password) {
+            return res.status(401).send("Email & Password is required");
+        }
+
+        const user = await activeTable.findOne({
+            email: email.trim().toLowerCase(),
+            isDeleted: false
+        });
+
+        if (!user) {
+            return res.status(401).send("No user found");
+        }
+
+        if (user.password !== password) {
+            return res.status(401).send("Invalid Password");
+        }
+
+        const token = jwt.sign(
+            {
+                userId: user._id.toString(),
+                email: user.email
+            },
+            process.env.JWT_PUBLIC_SECRET_KEY,
+            { expiresIn: process.env.JWT_EXPIRES_IN || "2h" }
+        );
+
+        return res.status(200).json({
+            message: "Login Successfull",
+            token,
+            user: {
+                _id: user._id,
+                name: user.name,
+                email: user.email
+            }
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message: "Login Failed"
+        })
+    }
+}
