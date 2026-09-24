@@ -2,9 +2,47 @@ import './login.css'
 import { MdEmail } from "react-icons/md";
 import { IoIosLock } from "react-icons/io"
 import { FaFacebookF, FaTwitter, FaGoogle } from "react-icons/fa";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useForm } from "react-hook-form";
+import { userValidation } from '../../../validation/userValidation';
+import axiosinterceptor from '../../../services/axiosinterceptor';
 
 const Login = () => {
+    const navigate = useNavigate();
+    const { register, handleSubmit, formState: { errors } } = useForm({
+        defaultValues: {
+            email: "",
+            password: ""
+        }
+    })
+
+
+    const submitForm = async (data) => {
+        console.log(data);
+        try {
+            const response = await axiosinterceptor.post("/activeuser/login", {
+                email: data.email,
+                password: data.password
+            });
+            console.log("Login ", response.data);
+
+            //Save JWT Token in LocalStorage
+            localStorage.setItem(
+                "authToken", response.data.token
+            )
+
+            localStorage.setItem("activeUser", response.data.user);
+
+            navigate("/", { replace: true })
+
+        } catch (error) {
+            console.log(" Login error", error);
+            // toast.error(error.response?.data?.message || "Unable to login")
+        }
+
+        // reset();
+    }
+
     return (
         <>
             <div className="container-fluid  m-0 d-flex align-items-center login4-container">
@@ -20,7 +58,7 @@ const Login = () => {
                                 </p>
                             </div>
                             <div className="col-6 d-flex justify-content-center align-items-center p-4">
-                                <form action="" className="login4-form">
+                                <form onSubmit={handleSubmit(submitForm)} className="login4-form">
                                     <h4 className="fw-bolder mb-4 text-center login4-form-title">
                                         Member Login
                                     </h4>
@@ -28,13 +66,15 @@ const Login = () => {
                                         <span className="fs-5 d-flex align-items-center login4-icon">
                                             <MdEmail />
                                         </span>
-                                        <input type="text" className="border-0 bg-transparent w-100 login4-input" placeholder="Email" />
+                                        <input type="text"{...register("email", userValidation.email)} className="border-0 bg-transparent w-100 login4-input" placeholder="Email" />
+                                        {errors.email && <p className='text-danger'>{errors.email.message}</p>}
                                     </div>
                                     <div className="d-flex mt-3 gap-3 align-items-center bg-body-secondary rounded-pill py-2 px-4 login4-input-group">
                                         <span className="fs-5 d-flex align-items-center login4-icon">
                                             <IoIosLock />
                                         </span>
-                                        <input type="password" className="border-0 bg-transparent w-100 login4-input" placeholder="Password" />
+                                        <input type="password"{...register("password", userValidation.password)} className="border-0 bg-transparent w-100 login4-input" placeholder="Password" />
+                                        {errors.password && <p className='text-danger'>{errors.password.message}</p>}
                                     </div>
                                     <div className="d-flex justify-content-between mt-3 login4-options">
                                         <label className="d-flex align-items-center login4-checkbox-label">

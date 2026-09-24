@@ -3,13 +3,23 @@ const user1Table = require('../models/usermodel');
 const usercontroller = require('../controllers/usercontroller');
 const activeTable = require('../models/activemodel');
 const activecontroller = require('../controllers/activeusercontroller');
+const authenticationToken = require('../middleware/authMiddleware');
 const router = express.Router();
 
+
+// Public Routes
 // register
 router.post('/activeuser/post', activecontroller.postUser);
 //login
 router.post('/activeuser/login', activecontroller.loginActiveuser);
+router.post('/activeuser/getuserbyemail', activecontroller.getUserByEmail);
+router.put('/activeuser/updatepassword/:id', activecontroller.updatePassword);
 
+
+
+// Protected Route
+
+router.use('/user', authenticationToken);
 
 router.get('/user', usercontroller.getUser);
 
@@ -24,18 +34,19 @@ router.delete('/user/delete/:id', usercontroller.deleteUser)
 //active user
 // router.post('/activeuser/post', activecontroller.postUser);
 
-router.get('/activeuser/get', activecontroller.getUser);
 
-router.get('/activeuser/get/:id', activecontroller.getUserById);
+router.get('/activeuser/get', authenticationToken, activecontroller.getUser);
 
-router.post('/activeuser/getuserbyemail', activecontroller.getUserByEmail);
+router.get('/activeuser/get/:id', authenticationToken, activecontroller.getUserById);
 
-router.put('/activeuser/update/:id', activecontroller.update);
 
-router.put('/activeuser/updatepassword/:id', activecontroller.updatePassword);
 
-router.delete('/activeuser/delete/:id', activecontroller.softDelete);
+router.put('/activeuser/update/:id', authenticationToken, activecontroller.update);
 
-router.delete('/activeuser/harddelete/:id', activecontroller.hardDelete);
+
+
+router.delete('/activeuser/delete/:id', authenticationToken, activecontroller.softDelete);
+
+router.delete('/activeuser/harddelete/:id', authenticationToken, activecontroller.hardDelete);
 
 module.exports = router;

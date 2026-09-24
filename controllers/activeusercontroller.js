@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const activeTable = require('../models/activemodel');
 
 exports.postUser = async (req, res) => {
@@ -139,6 +140,7 @@ exports.loginActiveuser = async (req, res) => {
             return res.status(401).send("Invalid Password");
         }
 
+
         const token = jwt.sign(
             {
                 userId: user._id.toString(),
@@ -147,6 +149,7 @@ exports.loginActiveuser = async (req, res) => {
             process.env.JWT_PUBLIC_SECRET_KEY,
             { expiresIn: process.env.JWT_EXPIRES_IN || "2h" }
         );
+
 
         return res.status(200).json({
             message: "Login Successfull",

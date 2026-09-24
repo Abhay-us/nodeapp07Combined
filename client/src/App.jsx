@@ -5,6 +5,7 @@ import UserTableById from './components/UserTableById'
 import Register from './components/Auth/register/Register'
 import Login from './components/Auth/login/Login'
 import ForgotPassword from './components/Auth/forgotPassword/ForgotPassword'
+import ProtectedRoute from './components/Auth/ProtectedRoute'
 
 // import UpdateUser from './components/UpdateUser'
 
@@ -17,12 +18,17 @@ function App() {
         </h1>
       </div>
       <Routes>
-        <Route path='/' element={<UserTable />}></Route>
-        {/* <Route path="/update-user/:id" element={<UpdateUser />} /> */}
-        <Route path="/view-user/:id" element={<UserTableById />} />
         <Route path='/register' element={<Register />} />
         <Route path='/login' element={<Login />} />
         <Route path='/forgotPassword' element={<ForgotPassword />} />
+
+        <Route element={<ProtectedRoute />} >
+          <Route path='/' element={<UserTable />}></Route>
+          {/* <Route path="/update-user/:id" element={<UpdateUser />} /> */}
+          <Route path="/view-user/:id" element={<UserTableById />} />
+
+        </Route>
+
       </Routes>
 
     </>

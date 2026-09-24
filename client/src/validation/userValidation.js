@@ -25,6 +25,24 @@ export const userValidation = {
             message: "Please enter a valid email address",
         },
     },
+    password: {
+        required: {
+            value: true,
+            message: "Password is required"
+        },
+        // minLength: {
+        //     value: 8,
+        //     message: "Password must be at least 8 characters"
+        // },
+        // maxLength: {
+        //     value: 20,
+        //     message: "Password must not exceed 20 characters"
+        // },
+        // pattern: {
+        //     value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+        //     message: "Password must contain uppercase, lowercase, number and special character"
+        // }
+    },
 
     phoneNumber: {
         required: {

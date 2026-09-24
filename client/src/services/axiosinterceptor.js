@@ -1,17 +1,22 @@
 import axios from "axios";
 
 const axiosinterceptor = axios.create({
-    baseURL:"http://localhost:5454", 
+    baseURL: "http://localhost:5454",
     timeout: 3600,
     headers: {
         content: "application/json"
-    }   
+    }
 });
 
 //request body
 axiosinterceptor.interceptors.request.use(
     (config) => {
         console.log("Request : ", config)
+        const token = localStorage.getItem("authToken");
+
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
 
         return config;
     },
@@ -22,11 +27,21 @@ axiosinterceptor.interceptors.request.use(
 
 // response body
 axiosinterceptor.interceptors.response.use(
-    (response)=>{
+    (response) => {
         console.log("Response : ", response)
         return response;
     },
     (error) => {
+
+        if (error.response?.status === 401) {
+            localStorage.removeItem("authToken");
+            localStorage.removeItem("activeUser");
+
+            if (window.location.pathname !== "/login") {
+                window.location.replace("/login");
+            }
+        }
+
         return Promise.reject(error);
     }
 )
