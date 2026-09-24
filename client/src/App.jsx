@@ -6,6 +6,7 @@ import Register from './components/Auth/register/Register'
 import Login from './components/Auth/login/Login'
 import ForgotPassword from './components/Auth/forgotPassword/ForgotPassword'
 import ProtectedRoute from './components/Auth/ProtectedRoute'
+import ActiveUser from './components/ActiveUser'
 
 // import UpdateUser from './components/UpdateUser'
 
@@ -24,6 +25,7 @@ function App() {
 
         <Route element={<ProtectedRoute />} >
           <Route path='/' element={<UserTable />}></Route>
+          <Route path='/activeuser' element={<ActiveUser />}></Route>
           {/* <Route path="/update-user/:id" element={<UpdateUser />} /> */}
           <Route path="/view-user/:id" element={<UserTableById />} />
 
