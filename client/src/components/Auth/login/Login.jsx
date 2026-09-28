@@ -15,8 +15,6 @@ const Login = () => {
             password: ""
         }
     })
-
-
     const submitForm = async (data) => {
         console.log(data);
         try {

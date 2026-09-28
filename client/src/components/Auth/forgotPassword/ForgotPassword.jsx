@@ -9,7 +9,7 @@ import axiosinterceptor from "../../../services/axiosinterceptor";
 
 const ForgotPassword = () => {
     const navigate = useNavigate();
-
+    const [activeUser, setActiveUser] = useState();
     const [showPasswordPage, setShowPasswordPage] = useState(false);
     const { register, handleSubmit, reset, formState: { errors } } = useForm({
         defaultValues: {
@@ -19,7 +19,6 @@ const ForgotPassword = () => {
         }
     });
 
-    const [activeUser, setActiveUser] = useState();
 
     const submitForm = async (data) => {
         try {
@@ -51,12 +50,12 @@ const ForgotPassword = () => {
         }
 
         if (!data.password || !data.confirmPassword) {
-            toast.error("Please enter password & confirm password.")
+            toast.error("Please enter password & confirm password.");
             return;
         }
 
         if (data.password !== data.confirmPassword) {
-            toast.error("Password Doesn't match.")
+            toast.error("Password Doesn't match.");
             return;
         }
 

@@ -12,7 +12,7 @@ const Register = () => {
             email: "",
             password: "",
             confirmPassword: "",
-            isTermsFlag: false
+            isTermsFlag: false  
         }
     });
 

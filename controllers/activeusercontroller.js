@@ -162,7 +162,7 @@ exports.loginActiveuser = async (req, res) => {
         })
     } catch (error) {
         return res.status(500).json({
-            message: "Login Failed"
+            message: "Login Failed" 
         })
     }
 }

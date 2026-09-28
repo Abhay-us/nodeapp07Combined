@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { Link } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { useForm } from "react-hook-form"; 
+import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from 'react-toastify'
 import Table from 'react-bootstrap/Table';
 import { userValidation } from "../validation/userValidation";
@@ -48,6 +48,16 @@ const UserTable = () => {
         handleClose();
     }
 
+    // post user
+    const postUser = async (data) => {
+        console.log("Post user = " + JSON.stringify(data));  //is mainly used for debugging. It prints your data object in a readable format in the browser console.
+        try {
+            await axiosinterceptor.post(`/user/post`, data);
+            toast.success("User Added Successfully.", { position: "bottom-right" })
+        } catch (error) {
+            console.error('Error fetching users:', error);
+        }
+    }
 
     //get
     const fetchUsers = async () => {
@@ -75,20 +85,6 @@ const UserTable = () => {
         setDeleteShow(true);
     };
 
-
-    // post user
-    const postUser = async (data) => {
-        console.log("Post user = " + JSON.stringify(data));  //is mainly used for debugging. It prints your data object in a readable format in the browser console.
-        try {
-            await axiosinterceptor.post(`/user/post`, data);
-            toast.success("User Added Successfully.", { position: "bottom-right" })
-        } catch (error) {
-            console.error('Error fetching users:', error);
-        }
-    }
-
-
-
     //edit user
     const handleEditShow = (user) => {
         setEditUser(user);
@@ -113,7 +109,6 @@ const UserTable = () => {
     };
     const submitEditForm = async (data) => {
         data.status = data.status === "active" ? true : false;
-
         await putUser(editUser._id, data);
         fetchUsers();
         reset();
